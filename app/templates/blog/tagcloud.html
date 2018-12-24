@@ -1,0 +1,13 @@
+{% extends "blog/layout.html" %}
+
+{% block main_content %}
+{{ super() }}
+<h2 id="main-title">Tag cloud</h2>
+<div class="tagcloud">
+{% for tag in tags %}
+    <div class="tagcloud-item">
+        <a href="{{ url_for('.index', tag=tag.0.tag) }}" rel="tag">{{ tag.0.tag }} <span class="badge badge-default">{{ tag.1 }}</span></a>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

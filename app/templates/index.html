@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{{ super() }}
+
+<div class="masthead">
+    <div class="container">
+        <div class="wrapper">
+    <p class="lead">I am a research scientist developing new tests to detect and treatments to slow the progression of kidney disease.</p>
+
+    <p class="lead">I have been developing software to aid my research since 2002.</p>
+</div>
+</div>
+</div>
+
+<div class="container">
+    <div class="wrapper">
+        <div class="recent-posts">
+            <h2>Recent posts</h2>
+            <ul class="">
+                {% for post in  posts %}
+                <li class="">
+                <a href="{{ url_for('blog.detail', slug=post.slug) }}" title="{{ post.title }}">
+                    {{ post.title }}
+                </a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="social-media">
+            <h2>Elsewhere on the web</h2>
+            <ul class="">
+                <li class="">
+                    <a href="https://twitter.com/jonmstreet">Twitter</a>
+                </li>
+                <li class="">
+                    <a href="https://github.com/streety/">Github</a>
+                </li>
+                <li class="">
+                    <a href="http://www.linkedin.com/in/jonathanstreet">LinkedIn</a>
+                </li>
+                <li class="">
+                    <a href="http://facebook.com/streetjonathan">Facebook</a>
+                </li>
+            </ul>
+    </div>
+    </div>
+</div>
+
+{% endblock %}

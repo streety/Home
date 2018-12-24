@@ -1,0 +1,70 @@
+{% extends "blog/layout.html" %}
+
+{% block head_title %}{{ post.title }} :: {{ super() }}{% endblock %}
+
+{% block main_content %}
+{{ super() }}
+
+<h2 class="blog-post-title">
+    <a href="{{ url_for('.detail', slug=post.slug) }}">{{ post.title }}</a>
+</h2>
+<p class="blog-post-meta">
+    Published on {{ post.pubdate.strftime("%d %b %Y") }}.
+    Tagged: {% for tag in post.tags %}
+        <a href="{{ url_for('.index', tag=tag.tag) }}" rel="tag">{{ tag.tag }}</a> 
+    {% endfor %}
+</p>
+{{ post.format_summary()|safe }}
+{{ post.format_body()|safe }}
+
+
+<h3 id="comments">Comments</h3>
+{% for comment in post.approved_and_visitor_comments %}
+    <div class="comment">
+        <h4>{% if comment.website %}
+            <a href="{{ comment.website }}" rel="external nofollow">
+            {% endif %}{{ comment.name }}
+            {% if comment.website %}</a>{% endif %}
+        </h4>
+        <p class="comment-meta">{{ comment.pubdate.strftime("%b %d, %Y at %H:%M") }}</p>
+        <div class="comment-body">
+            {% if not comment.published %}
+            <div class="alert alert-success">Your comment has been successfully submitted and is awaiting approval.</div>
+            {% endif %}
+            {{ comment.body|nl2br }}
+        </div>
+    </div>
+{% endfor %}
+
+
+{% macro form_field_with_errors(field) %}
+    {% set field_id = field.name %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    <div class="form-group {% if field.errors %}has-error{% endif %}">
+        {% if field.errors %}
+            <div class="alert alert-danger"><ul>
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul></div>
+        {% endif %}
+        {{ field.label(class_="control-label") }}
+        <div>
+            {{ field(class_=css_class, **kwargs) }}
+        </div>
+    </div>
+{% endmacro %}
+{% if post.accepting_comments %}
+    <form method="POST" action="#comment-form" id="comment-form">
+        {{ form.hidden_tag() }}
+        {{ form_field_with_errors(form.name) }}
+        {{ form_field_with_errors(form.email, 
+            placeholder="Email (optional)") }}
+        {{ form_field_with_errors(form.website, 
+            placeholder="Website (optional)") }}
+        {{ form_field_with_errors(form.comment) }}
+        <button type="submit">Post comment</button>
+    </form>
+{% endif %}
+
+{% endblock %}

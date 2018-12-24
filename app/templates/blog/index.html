@@ -1,0 +1,95 @@
+{% extends "blog/layout.html" %}
+
+{% block head_title %}{{ super() }}{% endblock %}
+
+{% block head %}
+
+{{ super() }}
+{% if tag %}
+	<link rel="alternate" type="application/atom+xml" title="{{ tag }} specific posts on jonathanstreet.com" href="{{ url_for('.feed', tag=tag) }}">
+{% endif %}
+
+{% endblock %}
+
+{% macro tag_conditional_url_for(path, tag, page) %}
+{%- if tag %}
+    {{- url_for(path, page = page , tag = tag) -}}
+{% else %}
+    {{- url_for(path, page = page) -}}
+{% endif -%}
+{% endmacro %}
+
+{% block main_content %}
+{{ super() }}
+
+
+{% for p in posts.items %}
+    <div class="blog-post">
+        <h2 class="blog-post-title">
+            <a href="{{ url_for('.detail', slug=p.slug) }}">{{ p.title }}</a>
+        </h2>
+        <p class="blog-post-meta">
+            Published on {{ p.pubdate.strftime("%d %b %Y") }}.
+            Tagged:
+            {% for t in p.tags %}
+                <a href="{{ url_for('.index', tag=t.tag) }}" rel="tag">{{ t.tag }}</a> 
+            {% endfor %}
+        </p>
+
+        {{ p.format_summary()|safe }}
+        <p>
+            {% if p.body %}
+                <a href="{{ url_for('.detail', slug=p.slug) }}">
+                    <i>Continue reading ...</i>
+                </a>
+            {% elif p.approved_and_visitor_comments|length > 0 %}
+                <a href="{{ url_for('.detail', slug=p.slug) }}#comments">
+                    <i>Read comments ...</i>
+                </a>
+            {% elif p.accepting_comments %}
+                <a href="{{ url_for('.detail', slug=p.slug) }}#comment-form">
+                    <i>Post a comment ...</i>
+                </a>
+            {% endif %}
+    </div>
+{% endfor %}
+
+<nav area-label="Page navigation">
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item{% if not posts.has_prev %} disabled{% endif %}">
+        <a class="page-link" href="{% if not posts.has_prev %}#{% else %}{{ tag_conditional_url_for('.index', tag=tag, page=posts.prev_num) }}{% endif %}" area-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+            </a>
+        </li>
+
+    {%- for page in posts.iter_pages() %}
+        {%- if page %}
+            {%- if page != posts.page %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ tag_conditional_url_for('.index', tag=tag, page=page) }}">
+                        {{- page -}}
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item active">
+                    <a class="page-link" href="{{- tag_conditional_url_for('.index', tag=tag, page=page) -}}">
+                        {{- page -}}
+                    </a>
+                </li>
+            {% endif -%}
+        {% endif -%}
+    {% endfor -%}
+
+        <li class="page-item{% if not posts.has_next %} disabled{% endif %}">
+        <a class="page-link" href="{% if not posts.has_next %}#{% else %}{{ tag_conditional_url_for('.index', tag=tag, page=posts.next_num) }}{% endif %}" area-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+{% endblock %}

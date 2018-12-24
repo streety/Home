@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block head_title %}Blog ::{{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="alternate" type="application/atom+xml" title="Atom feed for jonathanstreet.com" href="{{ url_for('.feed', ) }}">
+
+{% endblock %}
+
+{% block body %}
+
+{{ super() }}
+
+
+<div class="container">
+    <div class="wrapper">
+        <main>
+            {% block main_content %}
+            {% endblock %}
+        </main>
+        
+        <aside>
+            <div class="side-panel">
+            <h2 class="side-panel-title">Recent articles</h2>
+            <ul class="">
+            {% for p in sidebar_posts %}
+                <li><a href="{{ url_for('.detail', slug=p.slug) }}">{{ p.title }}</a></li>
+            {% endfor %}
+            </ul>
+            </div>
+            <div class="side-panel">
+            <h2 class="side-panel-title">Tags</h2>
+            <ul class="">
+            {% for t in sidebar_tags %}
+                <li><a href="{{ url_for('.index', tag=t[0].tag) }}">{{ t[0].tag }}</a></li>
+            {% endfor %}
+            </ul>
+            <p>View <a href="{{ url_for('.tagcloud') }}">all tags</a>.</p>
+            </div>
+            
+            
+            <div class="side-panel">
+            <h2 class="side-panel-title">Social media</h2>
+            <ul class="">
+                <li class="">
+                    <a href="https://twitter.com/jonmstreet">Twitter</a>
+                </li>
+                <li class="">
+                    <a href="https://github.com/streety/">Github</a>
+                </li>
+                <li class="">
+                    <a href="http://www.linkedin.com/in/jonathanstreet">LinkedIn</a>
+                </li>
+                <li class="">
+                    <a href="http://facebook.com/streetjonathan">Facebook</a>
+                </li>
+            </ul>
+            </div>
+        </aside>
+        
+
+        
+        
+    </div>
+</div>
+
+
+{% endblock %}

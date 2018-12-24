@@ -1,0 +1,148 @@
+@import "bootstrap";
+
+
+/*
+GENERAL LAYOUT
+*/
+
+
+body {
+    position: relative;
+}
+
+
+.masthead {
+    color: $brand-primary;
+    padding: 0 1rem;
+    p.lead {
+        margin: 2rem auto;
+    }
+}
+
+
+.container {
+    @include make-container();
+}
+
+
+.wrapper {
+    @include make-row();
+}
+
+
+/*
+HOMEPAGE
+*/
+
+
+.recent-posts, .social-media {
+    @include make-col-ready();
+    
+    @include media-breakpoint-up(sm) {
+        @include make-col(6);
+    }
+    h2, ul {
+        text-align: center;
+        padding: 0 1rem;
+    }
+    li {
+        line-height: 2;
+    }
+}
+
+
+/*
+BLOG 
+*/
+
+
+main {
+@include make-col-ready();
+    @include media-breakpoint-up(sm) {
+        @include make-col(8);
+    }
+}
+
+
+aside {
+    @include make-col-ready();
+    @include media-breakpoint-up(sm) {
+        @include make-col(3);
+        @include make-col-offset(1);
+    }
+}
+
+
+.side-panel:first-of-type > .side-panel-title {
+    padding-top: 5rem;
+}
+
+
+.side-panel-title {
+    color: $brand-primary;
+}
+
+
+.blog-post:first-of-type > .blog-post-title {
+    padding-top: 5rem;
+}
+
+
+main > h2.blog-post-title, main > h2#main-title {
+    padding-top: 5rem;
+}
+
+
+p.blog-post-meta, p.comment-meta {
+    font-size: 70%;
+}
+
+
+.tagcloud {
+    .tagcloud-item {
+        padding: 1rem;
+        display: inline-block;
+        span.badge {
+            margin-left: 0.25rem;
+        }
+    }
+}
+
+
+/*
+CV & Publications
+*/
+
+
+h2#publications, h2#positions {
+    padding-top: 5rem;
+}
+
+
+.citations, .positions {
+    @extend .list-group;
+}
+
+
+.citation, .position {
+    @extend .list-group-item;
+    display: block;
+}
+
+
+.stayput {
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+}
+
+
+#fixed-menu {
+    ul.nav {
+        display: block;
+        position: sticky;
+        padding-top: 5rem;
+
+    }
+    
+}

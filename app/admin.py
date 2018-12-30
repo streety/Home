@@ -19,15 +19,7 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
-        form = LoginForm(request.form)
-        if helpers.validate_form_on_submit(form):
-            user = form.get_user()
-            login.login_user(user)
-
-        if login.current_user.is_authenticated:
-            return redirect(url_for('.index'))
-        self._template_args['form'] = form
-        return super(MyAdminIndexView, self).index()
+        return redirect(url_for('login'))
 
     @expose('/logout/')
     def logout_view(self):

@@ -21,7 +21,7 @@ migrate = Migrate(app, db)
 
 # Set up css file creation, template utility functions,
 # and general content pages
-from app import assets, jinja_filters, views
+from app import assets, jinja_filters
 
 
 # Register blog
@@ -34,12 +34,32 @@ import flask_login as login
 login_manager = login.LoginManager()
 login_manager.init_app(app)
 
-from app.forms import User
+class User:
+    def __init__(self, user):
+        self.user = user
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.user.id
+
+
+from app import models
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = User()
-    return user
+    user = models.User.query.filter_by(id=int(user_id)).first()
+    return User(user)
 
 
 from flask_admin import Admin
@@ -47,3 +67,6 @@ from app.admin import MyAdminIndexView
 admin = Admin(app, url='/admin', index_view=MyAdminIndexView(),
               base_template='my_admin_master.html')
 from app.blog import admin
+
+from app import views
+

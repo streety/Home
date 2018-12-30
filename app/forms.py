@@ -1,41 +1,39 @@
 import os
 import bcrypt
 from wtforms import form, fields, validators
+from flask_wtf import Form
+from wtforms import TextAreaField, StringField, validators
+
+from app import models
 
 
-class LoginForm(form.Form):
-    """ Login form with built in validation of password against
-    environment variable as only single admin user is expected. """
+class LoginForm(Form):
+    """ Login form with built in validation of password. """
 
-    login = fields.TextField(validators=[validators.required()])
+    username = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
-    def validate_login(self, field):
-        if self.login.data != os.environ['FLASK_ADMIN_USER']:
-            raise validators.ValidationError('Invalid user')
+    def validate_password(self, field):
+        self.user = models.User.query.filter_by(username=self.username.data).first()
+        
+        if self.user == None:
+            raise validators.ValidationError('Invalid username or password')
 
         if bcrypt.hashpw(self.password.data.encode('utf-8'),
-                    os.environ['FLASK_ADMIN_PASSWORD'].encode('utf-8')) != \
-                os.environ['FLASK_ADMIN_PASSWORD'].encode('utf-8'):
-            raise validators.ValidationError('Invalid password')
-
-    def get_user(self):
-        user = User()
-        return user
+                    self.user.password_hash) != \
+                self.user.password_hash:
+            raise validators.ValidationError('Invalid username or password')
 
 
-class User(object):
-    """ Dummy user class """
+class AddTokenForm(Form):
+    """ Form to add a U2F token. """
 
-    @property
-    def is_authenticated(self):
-        return True
+    name = fields.TextField(validators=[validators.required()])
+    response = fields.HiddenField(validators=[validators.required()])
 
-    def is_active(self):
-        return True
 
-    def is_anonymous(self):
-        return False
+class SignTokenForm(Form):
+    """ Sign in using a token """
 
-    def get_id(self):
-        return 1
+    response = fields.HiddenField(validators=[validators.required()])
+

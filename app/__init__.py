@@ -70,3 +70,20 @@ from app.blog import admin
 
 from app import views
 
+
+from werkzeug.exceptions import default_exceptions, HTTPException
+from flask import render_template
+
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return render_template('error.html', 
+                            error=code, 
+                            description=default_exceptions[code].description), code
+
+for ex in default_exceptions:
+    app.register_error_handler(ex, handle_error)
+
+
+

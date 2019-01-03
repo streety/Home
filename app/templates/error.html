@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+
+{% block head_title %}Error {{ error }} ::{{ super() }}{% endblock %}
+            
+            
+
+{% block body %}
+
+{{ super() }}
+
+
+<div class="container">
+    <div class="wrapper">
+        <main>
+        <h2 id="main-title">Error {{ error }}</h2>
+
+        <p>{{ description }}</p>
+
+
+            
+        </main>
+    </div>
+</div>
+
+
+
+{% endblock %}

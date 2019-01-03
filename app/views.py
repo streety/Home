@@ -30,6 +30,10 @@ def now():
 def contact():
     return render_template('contact.html')
 
+from flask import abort
+@app.route('/error<code>/')
+def error(code):
+    abort(int(code))
 
 @app.route('/account/login', methods=['GET', 'POST'])
 def login():

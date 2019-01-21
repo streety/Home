@@ -22,12 +22,16 @@ class Post(db.Model):
     published = db.Column(db.Boolean, )
     slug = db.Column(db.String(140), index=True, unique=True, )
     accepting_comments = db.Column(db.Boolean, )
+    post_type = db.Column(db.String(50), nullable=True, )
+    display_order = db.Column(db.Integer, nullable=True, )
+    image = db.Column(db.Text, nullable=True, )
     comments = db.relationship('Comment', backref='post', lazy='dynamic', )
     tags = db.relationship('Tag', secondary=tags,
                            backref=db.backref('posts', lazy='dynamic'))
 
     def __init__(self, title='', summary='', body='', pubdate=None, 
-                 published=False, slug='', accepting_comments=False, tags=[]):
+                 published=False, slug='', accepting_comments=False, 
+                 post_type='blog post', display_order=1, image='', tags=[]):
         self.title = title
         self.summary = summary
         self.body = body

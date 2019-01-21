@@ -4,52 +4,43 @@
 
 {{ super() }}
 
-<div class="masthead">
-    <div class="container">
-        <div class="wrapper">
+<div class="splash">
+    <div class="center_content">
+        <div class="splash_content">
+            <div class="photo">
+                <img src="media/splash-photodesaturated.jpg" />
+            </div>
+            <div class="blurb">
 
-            <p class="lead">Welcome to my site! My name is Jonathan Street. I am fascinated by how the world works and enjoy experimenting to find the answers. Professionally, I mainly ask questions about biology and human health. I am currently studying kidney disease at the National Institutes of Health.</p>
+                    <p class="lead">Welcome to my site! My name is Jonathan Street. I am fascinated by how the world works and enjoy experimenting to find the answers. I am currently studying kidney disease at the National Institutes of Health.</p>
 
-            <p class="lead">I frequently use programming and machine learning to answer questions I otherwise could not. I have been developing software since 2002 and enjoy helping others get started. I previously taught python and machine learning at the Foundation for Advanced Education in the Sciences at NIH and continue to host a monthly event for the python user group in Washington, D.C.</p>
+                    <p class="lead">I frequently use programming and machine learning to answer questions I otherwise could not. I have been developing software since 2002 and enjoy helping others get started. I have previously taught python and machine learning and continue to host a monthly event for the python user group in Washington, D.C.</p>
 
-            <p class="lead">I try to keep this site updated with posts on the interesting things I do. Usually scientific articles and blog posts on the data and programming challenges I encounter. The site is part résumé and part journal.</p>
-
-    
-</div>
-</div>
-</div>
-
-<div class="container">
-    <div class="wrapper">
-        <div class="recent-posts">
-            <h2>Recent posts</h2>
-            <ul class="">
-                {% for post in  posts %}
-                <li class="">
-                <a href="{{ url_for('blog.detail', slug=post.slug) }}" title="{{ post.title }}">
-                    {{ post.title }}
-                </a></li>
-                {% endfor %}
-            </ul>
+                    <p class="lead">I try to keep this site updated with posts on the interesting things I do. Usually scientific articles and blog posts on the data and programming challenges I encounter. The site is part résumé and part journal.</p>
+            </div>
         </div>
-        <div class="social-media">
-            <h2>Elsewhere on the web</h2>
-            <ul class="">
-                <li class="">
-                    <a href="https://twitter.com/jonmstreet">Twitter</a>
-                </li>
-                <li class="">
-                    <a href="https://github.com/streety/">Github</a>
-                </li>
-                <li class="">
-                    <a href="http://www.linkedin.com/in/jonathanstreet">LinkedIn</a>
-                </li>
-                <li class="">
-                    <a href="http://facebook.com/streetjonathan">Facebook</a>
-                </li>
-            </ul>
-    </div>
     </div>
 </div>
+
+<div class="fullpage">
+<div class="center_content">
+<h2 class="recent_activity_title">Recent Activity</h2>
+<ul class="recent_activity">
+{% for p in posts %}
+    <li class="recent_item">
+        <div class="image">
+        <a href="{{ url_for('blog.detail', slug=p.slug) }}"><img src="{{ p.image }}" /></a>
+        </div>
+        <div class="title">
+        <span class="{{ p.post_type|replace(" ", "_") }}">{{ p.post_type|upper }}</span>
+        <a href="{{ url_for('blog.detail', slug=p.slug) }}">{{ p.title }}</a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+
+</div>
+</div>
+
 
 {% endblock %}

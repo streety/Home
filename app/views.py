@@ -1,5 +1,7 @@
 from app import app, db, load_user, forms, models
-from app.blog.utils import get_sidebar_posts
+from app.blog import models as bm
+#from app.blog.utils import get_sidebar_posts
+#from app.posts import get_sidebar_posts
 from flask import render_template, session, flash, redirect, url_for
 from u2flib_server.u2f import (begin_registration, begin_authentication,
                                complete_registration, complete_authentication)
@@ -10,9 +12,19 @@ import os
 app_id = os.environ['FIDO_APP_ID']
 
 
+def get_posts(tag=None):
+    try:
+        posts = bm.Post.query.filter_by(published=True). \
+                filter(bm.Post.display_order != None). \
+                order_by(bm.Post.display_order.desc()).limit(8).all()
+        return posts
+    except AttributeError:
+        return []
+
+
 @app.route('/')
 def index():
-    posts = get_sidebar_posts()
+    posts = get_posts()
     return render_template('index.html', posts=posts)
 
 

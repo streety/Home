@@ -13,8 +13,8 @@
 {{ super() }}
 
 
-<div class="container">
-    <div class="wrapper">
+<div class="fullpage">
+    <div class="center_content blog">
         <main>
             {% block main_content %}
             {% endblock %}
@@ -23,7 +23,7 @@
         <aside>
             <div class="side-panel">
             <h2 class="side-panel-title">Recent articles</h2>
-            <ul class="">
+            <ul class="side-panel-list">
             {% for p in sidebar_posts %}
                 <li><a href="{{ url_for('.detail', slug=p.slug) }}">{{ p.title }}</a></li>
             {% endfor %}
@@ -35,8 +35,9 @@
             {% for t in sidebar_tags %}
                 <li><a href="{{ url_for('.index', tag=t[0].tag) }}">{{ t[0].tag }}</a></li>
             {% endfor %}
+            
+            <li>View <a href="{{ url_for('.tagcloud') }}">all tags</a>.</li>
             </ul>
-            <p>View <a href="{{ url_for('.tagcloud') }}">all tags</a>.</p>
             </div>
             
             

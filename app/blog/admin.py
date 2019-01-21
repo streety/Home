@@ -6,7 +6,10 @@ from app.blog import models as bm
 from flask_admin.contrib.fileadmin import FileAdmin
 import os.path as op
 
-admin.add_view(MyModelView(bm.Post, db.session))
+class PostView(MyModelView):
+    form_excluded_columns = ['comments']
+
+admin.add_view(PostView(bm.Post, db.session))
 admin.add_view(MyModelView(bm.Tag, db.session))
 admin.add_view(MyModelView(bm.Comment, db.session))
 

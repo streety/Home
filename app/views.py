@@ -16,7 +16,7 @@ def get_posts(tag=None):
     try:
         posts = bm.Post.query.filter_by(published=True). \
                 filter(bm.Post.display_order != None). \
-                order_by(bm.Post.display_order.desc()).limit(8).all()
+                order_by(bm.Post.display_order.desc()).limit(11).all()
         return posts
     except AttributeError:
         return []
